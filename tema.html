@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Procedimientos adicionales de auditoría — Tema</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4Z"/></svg>
+        Procedimientos adicionales de auditoría
+      </a>
+      <span class="crumb"><a href="index.html">Inicio</a> / Tema</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-title">
+      <h1>Procedimientos adicionales cuando existen dudas</h1>
+      <p>Explora el esquema interactivo, la línea de tiempo y el diagrama de flujo para comprender los procedimientos de auditoría adicionales cuando se identifican hechos o condiciones que generan dudas sobre la continuidad.</p>
+    </div>
+
+    <!-- ====== Iconographic Scheme ====== -->
+    <section class="card" id="esquema">
+      <h2 class="card-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Esquema iconográfico
+      </h2>
+      <p style="color:var(--slate-500); font-size:.92rem; margin-bottom:.6rem;">Haz clic en cada tarjeta para ver los detalles completos.</p>
+      <div class="icono-grid" id="icono-grid"></div>
+      <div class="icono-detail-panel" id="icono-detail-panel">
+        <h4>Selecciona un icono</h4>
+        <p>Haz clic en una tarjeta para ver la descripción completa.</p>
+      </div>
+    </section>
+
+    <!-- ====== Timeline ====== -->
+    <section class="card" id="cronologia">
+      <h2 class="card-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Línea de tiempo del proceso
+      </h2>
+      <p style="color:var(--slate-500); font-size:.92rem; margin-bottom:.6rem;">Haz clic en cada nodo para ver el detalle del paso.</p>
+      <div class="timeline-wrap">
+        <div class="timeline-track-line"></div>
+        <div class="timeline-progress" id="timeline-progress-bar"></div>
+        <div class="timeline-nodes" id="timeline-nodes"></div>
+      </div>
+      <div class="timeline-detail" id="timeline-detail">
+        <h4>Identificación</h4>
+        <p>El auditor identifica hechos o condiciones que generan dudas sobre la continuidad durante la ejecución de procedimientos de auditoría rutinarios.</p>
+      </div>
+    </section>
+
+    <!-- ====== Flow Diagram ====== -->
+    <section class="card" id="diagrama">
+      <h2 class="card-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+        Diagrama de flujo
+      </h2>
+      <p style="color:var(--slate-500); font-size:.92rem; margin-bottom:.6rem;">Haz clic en cada paso para ver el detalle o presiona <strong>Reproducir flujo</strong> para ver la secuencia automáticamente.</p>
+      <div class="flow-wrap" id="flow-wrap"></div>
+      <div class="flow-ctrl">
+        <button class="flow-play-btn" id="flow-play-btn">▶ Reproducir flujo</button>
+      </div>
+      <div class="flow-detail" id="flow-detail">
+        <h4>Dudas identificadas</h4>
+        <p>Se detectan hechos o condiciones que generan dudas sobre la continuidad de la entidad.</p>
+      </div>
+    </section>
+
+    <div class="card">
+      <a href="index.html" class="back-btn">← Volver al inicio</a>
+    </div>
+  </main>
+
+  <script src="tema.js"></script>
+</body>
+</html>

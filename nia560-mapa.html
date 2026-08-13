@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa Mental - NIA 560</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4Z"/></svg>
+        Mapa Mental - NIA 560
+      </a>
+      <span class="crumb"><a href="index.html">Inicio</a> / <a href="nia560.html">NIA 560</a> / Mapa Mental</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-title">
+      <h1>Mapa Mental — NIA 560</h1>
+      <p>Explora la estructura de la norma haciendo clic en cada nodo.</p>
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden;">
+      <div id="mm-container" class="mm-container">
+        <div class="mm-legend">
+          <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#bbf7d0;"></div>Nodo principal</div>
+          <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#bae6fd;"></div>Rama</div>
+        </div>
+        <div class="mm-controls">
+          <button class="mm-ctrl-btn" id="mm-zoom-in">+</button>
+          <button class="mm-ctrl-btn" id="mm-zoom-out">-</button>
+          <button class="mm-ctrl-btn" id="mm-reset" title="Restablecer">⟲</button>
+        </div>
+        <svg class="mm-svg" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid meet"><g></g></svg>
+        <div id="mm-detail" class="mm-detail">
+          <button class="close-btn" id="mm-detail-close">✕</button>
+          <h4></h4>
+          <p></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <a href="nia560.html" class="back-btn">← Volver a NIA 560</a>
+    </div>
+  </main>
+
+  <script src="mindmap.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      initMindMap({
+        containerId: 'mm-container',
+        root: 'NIA 560 - Hechos posteriores al cierre',
+        nodes: [
+          {label:'Responsabilidad del auditor', desc:'El auditor debe obtener evidencia suficiente y apropiada sobre si todos los hechos posteriores al cierre que puedan requerir ajuste o revelación han sido identificados.', sub:['Diseñar procedimientos apropiados','Ejecutar hasta la fecha del informe']},
+          {label:'Tipos de hechos', desc:'Se clasifican en hechos que proporcionan evidencia de condiciones existentes al cierre, y hechos que indican condiciones surgidas después del cierre.', sub:['Tipo I: Condiciones existentes al cierre','Tipo II: Condiciones surgidas después']},
+          {label:'Procedimientos posteriores', desc:'El auditor debe realizar procedimientos de auditoría cerca de la fecha del informe para detectar hechos posteriores que puedan requerir ajuste o revelación.', sub:['Revisión de documentos posteriores','Consultas a la dirección','Confirmaciones externas']},
+          {label:'Hechos tras el informe', desc:'Si se identifican hechos posteriores a la fecha del informe, el auditor debe evaluar si los estados financieros necesitan revisión.', sub:['Evaluar impacto','Determinar necesidad de ajuste','Comunicar a quienes corresponda']},
+          {label:'Efectos en el informe', desc:'Dependiendo de la naturaleza y materialidad del hecho, el informe de auditoría puede requerir modificación o emisión de un nuevo informe.', sub:['Opinión modificada','Informe revisado','Revelación adicional']},
+          {label:'Documentación', desc:'El auditor debe documentar los procedimientos realizados, los hechos identificados y las conclusiones alcanzadas respecto a los hechos posteriores.', sub:['Procedimientos ejecutados','Hechos relevantes','Decisiones tomadas']}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>

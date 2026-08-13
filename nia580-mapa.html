@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa Mental - NIA 580</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4Z"/></svg>
+        Mapa Mental - NIA 580
+      </a>
+      <span class="crumb"><a href="index.html">Inicio</a> / <a href="nia580.html">NIA 580</a> / Mapa Mental</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-title">
+      <h1>Mapa Mental — NIA 580</h1>
+      <p>Explora la estructura de la norma haciendo clic en cada nodo.</p>
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden;">
+      <div id="mm-container" class="mm-container">
+        <div class="mm-legend">
+          <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#bbf7d0;"></div>Nodo principal</div>
+          <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#bae6fd;"></div>Rama</div>
+        </div>
+        <div class="mm-controls">
+          <button class="mm-ctrl-btn" id="mm-zoom-in">+</button>
+          <button class="mm-ctrl-btn" id="mm-zoom-out">-</button>
+          <button class="mm-ctrl-btn" id="mm-reset" title="Restablecer">⟲</button>
+        </div>
+        <svg class="mm-svg" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid meet"><g></g></svg>
+        <div id="mm-detail" class="mm-detail">
+          <button class="close-btn" id="mm-detail-close">✕</button>
+          <h4></h4>
+          <p></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <a href="nia580.html" class="back-btn">← Volver a NIA 580</a>
+    </div>
+  </main>
+
+  <script src="mindmap.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      initMindMap({
+        containerId: 'mm-container',
+        root: 'NIA 580 - Manifestaciones escritas',
+        nodes: [
+          {label:'Objetivo', desc:'Obtener manifestaciones escritas de la dirección como evidencia de auditoría, complementando otras evidencias obtenidas durante la auditoría.', sub:['Representaciones explícitas','Representaciones implícitas']},
+          {label:'Solicitud a la dirección', desc:'El auditor debe solicitar manifestaciones escritas a la dirección y, cuando corresponda, a los gobernantes de la entidad.', sub:['Deben ser firmadas','Deben cubrir todo el período','Deben ser actualizadas']},
+          {label:'Hechos y opiniones', desc:'Incluyen que la dirección ha proporcionado toda la información relevante, que las transacciones significativas están registradas y que los estados financieros son completos.', sub:['Información completa','Registro apropiado','Controles internos']},
+          {label:'Irregularidades y fraude', desc:'Manifestaciones sobre el conocimiento de irregularidades, fraudes o incumplimientos de leyes y regulaciones que puedan afectar los estados financieros.', sub:['Fraudes detectados','Incumplimientos legales','Comunicaciones internas']},
+          {label:'Contingencias', desc:'Manifestaciones sobre contingencias y compromisos significativos, incluyendo litigios, garantías y obligaciones contractuales.', sub:['Litigios pendientes','Garantías otorgadas','Contratos significativos']},
+          {label:'Falta de manifestaciones', desc:'Si la dirección no proporciona las manifestaciones solicitadas, el auditor debe tratar esto como una limitación del alcance.', sub:['Opinión con salvedades','Opinión adversa','Opinión negada']}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>

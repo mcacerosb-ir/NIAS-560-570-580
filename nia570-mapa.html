@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa Mental - NIA 570</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4Z"/></svg>
+        Mapa Mental - NIA 570
+      </a>
+      <span class="crumb"><a href="index.html">Inicio</a> / <a href="nia570.html">NIA 570</a> / Mapa Mental</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-title">
+      <h1>Mapa Mental — NIA 570</h1>
+      <p>Explora la estructura de la norma haciendo clic en cada nodo.</p>
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden;">
+      <div id="mm-container" class="mm-container">
+        <div class="mm-legend">
+          <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#bbf7d0;"></div>Nodo principal</div>
+          <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#bae6fd;"></div>Rama</div>
+        </div>
+        <div class="mm-controls">
+          <button class="mm-ctrl-btn" id="mm-zoom-in">+</button>
+          <button class="mm-ctrl-btn" id="mm-zoom-out">-</button>
+          <button class="mm-ctrl-btn" id="mm-reset" title="Restablecer">⟲</button>
+        </div>
+        <svg class="mm-svg" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid meet"><g></g></svg>
+        <div id="mm-detail" class="mm-detail">
+          <button class="close-btn" id="mm-detail-close">✕</button>
+          <h4></h4>
+          <p></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <a href="nia570.html" class="back-btn">← Volver a NIA 570</a>
+    </div>
+  </main>
+
+  <script src="mindmap.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      initMindMap({
+        containerId: 'mm-container',
+        root: 'NIA 570 - Empresa en funcionamiento',
+        nodes: [
+          {label:'Duda significativa', desc:'El auditor debe evaluar si existe una duda significativa sobre la capacidad de la entidad para continuar como empresa en funcionamiento, considerando eventos o condiciones que puedan generar incertidumbre.', sub:['Evaluar hechos y condiciones','Identificar incertidumbres materiales']},
+          {label:'Procedimientos adicionales', desc:'Cuando se identifican hechos o condiciones que generan dudas, el auditor debe diseñar y ejecutar procedimientos de auditoría adicionales para obtener evidencia suficiente.', sub:['Análisis de ratios','Evaluación de deuda','Revisión de contratos']},
+          {label:'Evaluar planes de dirección', desc:'El auditor debe evaluar los planes de la dirección para mitigar las dudas sobre la continuidad, incluyendo la viabilidad y efectividad de dichos planes.', sub:['Planes de reestructuración','Ventas de activos','Obtención de financiamiento']},
+          {label:'Pronósticos de flujo', desc:'El auditor debe evaluar la fiabilidad de los pronósticos de flujos de efectivo futuros preparados por la dirección, incluyendo la razonabilidad de las hipótesis utilizadas.', sub:['Hipótesis de ingresos','Hipótesis de gastos','Horizonte temporal']},
+          {label:'Información a revelar', desc:'Cuando existe duda significativa, la dirección debe revelar información en los estados financieros sobre la naturaleza de las incertidumbres y los planes para mitigarlas.', sub:['Notas explicativas','Eventos subsecuentes','Riesgos clave']},
+          {label:'Efectos en el informe', desc:'El auditor debe determinar si los estados financieros proporcionan información adecuada y evaluar los efectos en el informe de auditoría.', sub:['Opinión con énfasis','Opinión adversa si es inadecuada','Informe sin salvedades si es adecuada']}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
