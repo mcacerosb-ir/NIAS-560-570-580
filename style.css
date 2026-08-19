@@ -187,6 +187,12 @@ main {
   background: linear-gradient(135deg, var(--blush-100), var(--peach-100));
   border-color: var(--blush-200);
 }
+/* Iconos puramente visuales: al ser contenido generado por CSS, los
+   lectores de pantalla y herramientas de "leer en voz alta" no los
+   incluyen en el texto que anuncian (a diferencia de un caracter Unicode
+   puesto directamente en el DOM). */
+.audio-btn.play::before { content: "\25B6"; margin-right: 6px; }
+.audio-btn.stop::before { content: "\25A0"; margin-right: 6px; }
 .audio-btn:hover, .quiz-submit:hover, .flow-play-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
