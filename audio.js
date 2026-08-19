@@ -23,6 +23,8 @@
       var btns  = c.querySelectorAll('button');
       if (links.length === 1 && links[0].classList.contains('back-btn')) continue;
       if (c.querySelector('.action-grid')) continue;
+      /* Omitimos la propia tarjeta del reproductor de audio (status/controles) */
+      if (c.querySelector('#audio-status') || c.querySelector('#audio-controls')) continue;
 
       var t = c.innerText || c.textContent || '';
       texto += t + '\n\n';
