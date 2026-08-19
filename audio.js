@@ -87,23 +87,26 @@
   var indiceActual = 0;
 
   /* ========== UI ========== */
-  function setEtiquetaPlay(icono, texto){
-    btnPlay.setAttribute('aria-label', texto);
-    btnPlay.innerHTML = '<span aria-hidden="true">' + icono + '</span> ' + texto;
+  /* Nota: NO usamos caracteres Unicode (▶ ■ ⏸) dentro del texto de los
+     botones. Algunas herramientas de lectura en pantalla / "leer en voz
+     alta" ignoran aria-hidden y anuncian el nombre del glifo tal cual
+     ("triangulo negro hacia la derecha"). Los iconos, si se quieren, se
+     agregan solo por CSS (::before) para que nunca formen parte del
+     texto real del DOM. */
+  function setEtiquetaPlay(texto){
+    btnPlay.textContent = texto;
   }
 
   function crearBotones(){
     controlsEl.innerHTML = '';
     var play = document.createElement('button');
     play.className = 'audio-btn play';
-    play.setAttribute('aria-label', 'Escuchar pagina');
-    play.innerHTML = '<span aria-hidden="true">\u25B6</span> Escuchar pagina';
+    play.textContent = 'Escuchar pagina';
     play.onclick = togglePlay;
 
     var stop = document.createElement('button');
     stop.className = 'audio-btn stop';
-    stop.setAttribute('aria-label', 'Detener lectura');
-    stop.innerHTML = '<span aria-hidden="true">\u25A0</span> Detener';
+    stop.textContent = 'Detener';
     stop.onclick = detener;
 
     controlsEl.appendChild(play);
@@ -123,14 +126,14 @@
       synth.pause();
       isPaused = true;
       statusEl.textContent = 'Pausado';
-      setEtiquetaPlay('\u25B6', 'Reanudar');
+      setEtiquetaPlay('Reanudar');
       return;
     }
     if (isPlaying && isPaused){
       synth.resume();
       isPaused = false;
       statusEl.textContent = 'Reproduciendo...';
-      setEtiquetaPlay('\u23F8', 'Pausar');
+      setEtiquetaPlay('Pausar');
       return;
     }
     iniciar();
@@ -147,7 +150,7 @@
     if (idx >= fragmentos.length){
       isPlaying = false; isPaused = false;
       statusEl.textContent = 'Completado';
-      setEtiquetaPlay('\u25B6', 'Escuchar pagina');
+      setEtiquetaPlay('Escuchar pagina');
       progressEl.style.width = '100%';
       return;
     }
@@ -160,7 +163,7 @@
     utterance.onstart = function(){
       isPlaying = true; isPaused = false;
       statusEl.textContent = 'Reproduciendo...';
-      setEtiquetaPlay('\u23F8', 'Pausar');
+      setEtiquetaPlay('Pausar');
       indiceActual = idx;
       actualizarProgreso();
     };
@@ -176,7 +179,7 @@
       if (detenidoManual) return;
       isPlaying = false; isPaused = false;
       statusEl.textContent = 'Error: ' + (e.error || 'desconocido');
-      setEtiquetaPlay('\u25B6', 'Escuchar pagina');
+      setEtiquetaPlay('Escuchar pagina');
     };
 
     synth.speak(utterance);
@@ -203,7 +206,7 @@
     if (synth) synth.cancel();
     isPlaying = false; isPaused = false;
     statusEl.textContent = 'Detenido';
-    setEtiquetaPlay('\u25B6', 'Escuchar pagina');
+    setEtiquetaPlay('Escuchar pagina');
     progressEl.style.width = '0%';
   }
 
