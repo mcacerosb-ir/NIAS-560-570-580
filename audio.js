@@ -10,6 +10,12 @@
   /* Si no hay contenedor de audio, no hacemos nada */
   if (!statusEl || !progressEl || !controlsEl) return;
 
+  /* Limite seguro de caracteres por utterance. Algunos motores de TTS
+     (p.ej. TextToSpeech nativo de Android) rechazan o truncan textos
+     de mas de ~4000 caracteres, por lo que dividimos el contenido en
+     fragmentos y los reproducimos en cola. */
+  var MAX_CHUNK = 1800;
+
   /* ========== Utilidades de texto ========== */
   function extraerTexto(){
     var main = document.querySelector('main');
@@ -20,7 +26,6 @@
       var c = cards[i];
       /* Omitimos cards que sean solo botones de navegacion */
       var links = c.querySelectorAll('a');
-      var btns  = c.querySelectorAll('button');
       if (links.length === 1 && links[0].classList.contains('back-btn')) continue;
       if (c.querySelector('.action-grid')) continue;
       /* Omitimos la propia tarjeta del reproductor de audio (status/controles) */
@@ -32,30 +37,78 @@
     return texto.trim();
   }
 
+  /* Divide el texto completo en fragmentos <= MAX_CHUNK caracteres,
+     respetando primero parrafos y, si un parrafo es demasiado largo,
+     dividiendo por oraciones. */
+  function dividirEnFragmentos(texto, maxLen){
+    var parrafos = texto.split(/\n{2,}/);
+    var fragmentos = [];
+    var actual = '';
+
+    function agregarPieza(pieza){
+      if (!pieza) return;
+      if ((actual + '\n\n' + pieza).trim().length > maxLen){
+        if (actual) fragmentos.push(actual.trim());
+        actual = pieza;
+      } else {
+        actual = actual ? (actual + '\n\n' + pieza) : pieza;
+      }
+    }
+
+    for (var i = 0; i < parrafos.length; i++){
+      var p = parrafos[i];
+      if (p.length > maxLen){
+        var oraciones = p.split(/(?<=[.!?])\s+/);
+        var sub = '';
+        for (var j = 0; j < oraciones.length; j++){
+          var s = oraciones[j];
+          if ((sub + ' ' + s).trim().length > maxLen){
+            if (sub) agregarPieza(sub.trim());
+            sub = s;
+          } else {
+            sub = sub ? (sub + ' ' + s) : s;
+          }
+        }
+        if (sub) agregarPieza(sub.trim());
+      } else {
+        agregarPieza(p);
+      }
+    }
+    if (actual) fragmentos.push(actual.trim());
+    return fragmentos;
+  }
+
   /* ========== Estado del reproductor ========== */
   var synth = window.speechSynthesis;
-  var utterance = null;
   var isPlaying = false;
   var isPaused  = false;
-  var progressTimer = null;
-  var fullText = '';
+  var detenidoManual = false;
+  var fragmentos = [];
+  var indiceActual = 0;
 
   /* ========== UI ========== */
+  function setEtiquetaPlay(icono, texto){
+    btnPlay.setAttribute('aria-label', texto);
+    btnPlay.innerHTML = '<span aria-hidden="true">' + icono + '</span> ' + texto;
+  }
+
   function crearBotones(){
     controlsEl.innerHTML = '';
-    var btnPlay = document.createElement('button');
-    btnPlay.className = 'audio-btn play';
-    btnPlay.textContent = '▶ Escuchar pagina';
-    btnPlay.onclick = togglePlay;
+    var play = document.createElement('button');
+    play.className = 'audio-btn play';
+    play.setAttribute('aria-label', 'Escuchar pagina');
+    play.innerHTML = '<span aria-hidden="true">\u25B6</span> Escuchar pagina';
+    play.onclick = togglePlay;
 
-    var btnStop = document.createElement('button');
-    btnStop.className = 'audio-btn stop';
-    btnStop.textContent = '■ Detener';
-    btnStop.onclick = detener;
+    var stop = document.createElement('button');
+    stop.className = 'audio-btn stop';
+    stop.setAttribute('aria-label', 'Detener lectura');
+    stop.innerHTML = '<span aria-hidden="true">\u25A0</span> Detener';
+    stop.onclick = detener;
 
-    controlsEl.appendChild(btnPlay);
-    controlsEl.appendChild(btnStop);
-    return btnPlay;
+    controlsEl.appendChild(play);
+    controlsEl.appendChild(stop);
+    return play;
   }
 
   var btnPlay = crearBotones();
@@ -70,29 +123,36 @@
       synth.pause();
       isPaused = true;
       statusEl.textContent = 'Pausado';
-      btnPlay.textContent = '▶ Reanudar';
+      setEtiquetaPlay('\u25B6', 'Reanudar');
       return;
     }
     if (isPlaying && isPaused){
       synth.resume();
       isPaused = false;
       statusEl.textContent = 'Reproduciendo...';
-      btnPlay.textContent = '⏸ Pausar';
+      setEtiquetaPlay('\u23F8', 'Pausar');
       return;
     }
     iniciar();
   }
 
-  function iniciar(){
-    if (synth.speaking || synth.pending) synth.cancel();
+  function actualizarProgreso(){
+    var pct = fragmentos.length ? Math.round((indiceActual / fragmentos.length) * 100) : 0;
+    progressEl.style.width = pct + '%';
+  }
 
-    fullText = extraerTexto();
-    if (!fullText){
-      statusEl.textContent = 'No hay contenido para leer.';
+  function hablarFragmento(idx){
+    if (detenidoManual) return;
+
+    if (idx >= fragmentos.length){
+      isPlaying = false; isPaused = false;
+      statusEl.textContent = 'Completado';
+      setEtiquetaPlay('\u25B6', 'Escuchar pagina');
+      progressEl.style.width = '100%';
       return;
     }
 
-    utterance = new SpeechSynthesisUtterance(fullText);
+    var utterance = new SpeechSynthesisUtterance(fragmentos[idx]);
     utterance.lang = 'es-ES';
     utterance.rate = 0.95;
     utterance.pitch = 1;
@@ -100,52 +160,56 @@
     utterance.onstart = function(){
       isPlaying = true; isPaused = false;
       statusEl.textContent = 'Reproduciendo...';
-      btnPlay.textContent = '⏸ Pausar';
-      progressEl.style.width = '0%';
-      animarProgreso();
+      setEtiquetaPlay('\u23F8', 'Pausar');
+      indiceActual = idx;
+      actualizarProgreso();
     };
 
     utterance.onend = function(){
-      isPlaying = false; isPaused = false;
-      statusEl.textContent = 'Completado';
-      btnPlay.textContent = '▶ Escuchar pagina';
-      progressEl.style.width = '100%';
-      clearInterval(progressTimer);
+      if (detenidoManual) return;
+      indiceActual = idx + 1;
+      actualizarProgreso();
+      hablarFragmento(indiceActual);
     };
 
     utterance.onerror = function(e){
+      if (detenidoManual) return;
       isPlaying = false; isPaused = false;
       statusEl.textContent = 'Error: ' + (e.error || 'desconocido');
-      btnPlay.textContent = '▶ Escuchar pagina';
-      clearInterval(progressTimer);
+      setEtiquetaPlay('\u25B6', 'Escuchar pagina');
     };
 
     synth.speak(utterance);
   }
 
+  function iniciar(){
+    detenidoManual = false;
+    if (synth.speaking || synth.pending) synth.cancel();
+
+    var fullText = extraerTexto();
+    if (!fullText){
+      statusEl.textContent = 'No hay contenido para leer.';
+      return;
+    }
+
+    fragmentos = dividirEnFragmentos(fullText, MAX_CHUNK);
+    indiceActual = 0;
+    progressEl.style.width = '0%';
+    hablarFragmento(0);
+  }
+
   function detener(){
+    detenidoManual = true;
     if (synth) synth.cancel();
     isPlaying = false; isPaused = false;
     statusEl.textContent = 'Detenido';
-    btnPlay.textContent = '▶ Escuchar pagina';
+    setEtiquetaPlay('\u25B6', 'Escuchar pagina');
     progressEl.style.width = '0%';
-    clearInterval(progressTimer);
-  }
-
-  function animarProgreso(){
-    clearInterval(progressTimer);
-    var pc = 0;
-    progressTimer = setInterval(function(){
-      if (!isPlaying) return;
-      pc += 0.5;
-      if (pc > 95) pc = 95;
-      progressEl.style.width = pc + '%';
-    }, 400);
   }
 
   /* Cancelar al salir de pagina */
   window.addEventListener('beforeunload', function(){
+    detenidoManual = true;
     if (synth) synth.cancel();
-    clearInterval(progressTimer);
   });
 })();
